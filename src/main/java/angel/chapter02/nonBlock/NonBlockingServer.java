@@ -31,7 +31,7 @@ public class NonBlockingServer {
             /**
              * 4. 생성한 Selector와 ServerSocketChannel 객체가 정상적으로 생성 되었는지 확인한다.
              */
-            if((ServerSocketChannel.open().isOpen()) && (selector.isOpen())){
+            if((serverSocketChannel.isOpen()) && (selector.isOpen())){
 
                 /**
                  * 5. 소켓 채널의 블로킹 모드의 기본값은 true다. 즉,별도로 논블로킹 모드를 지정하지 않았다면 블로킹 모드로 동작한다.
@@ -51,7 +51,6 @@ public class NonBlockingServer {
                  */
                 serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
                 System.out.println("접속 대기중");
-
                 while(true){
                     /**
                      * 8. Selector에 등록된 채널에서 변경 사항이 발생했는지 검사한다. Selector에 아무런 I/O 이벤트도 발생하지 않으면
@@ -152,6 +151,12 @@ public class NonBlockingServer {
                 return;
             }
             byte[] data = new byte[numRead];
+            //System.arraycopy(src, srcPos, dest, destPos, length)
+            //src = 복사하고자 하는 원본
+            // srcPos = 배열 복사하고자하는 start Index
+            // dest = 복사할 대상
+            // destPos = 복사본에 start Index
+            // length = 원본에서 복사본까지 얼만큼의 길이만큼 읽어올지
             System.arraycopy(buffer.array(), 0, data, 0, numRead);
             System.out.println(new String(data, "UTF-8") + " from " + socketChannel.getRemoteAddress());
 
